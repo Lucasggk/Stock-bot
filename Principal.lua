@@ -14,7 +14,7 @@ local eggShop = player.PlayerGui:WaitForChild("PetShop_UI"):WaitForChild("Frame"
 local function coletarEstoque(scroll)
     local itens = {}
     for _, i in ipairs(scroll:GetChildren()) do
-        if i:FindFirstChild("Main_Frame") and i.Main_Frame:FindFirstChild("Stock_Text") then
+        if i:IsA("Frame") and i:FindFirstChild("Main_Frame") and i.Main_Frame:FindFirstChild("Stock_Text") then
             local stock = i.Main_Frame.Stock_Text.Text
             if stock ~= "X0 Stock" then
                 table.insert(itens, i.Name .. " - " .. stock)
@@ -36,11 +36,12 @@ while true do
         ultimoSeedGearMinuto = agora.min
 
         local currentSeedStock = coletarEstoque(seedShop)
-        local currentGearStock = coletarEstoque(gearShop)
-
         if #currentSeedStock > 0 then
             enviarWebhook(sweb, "🌱 Seed Shop - Estoque Atualizado", currentSeedStock)
         end
+        task.wait(0.2)
+
+        local currentGearStock = coletarEstoque(gearShop)
         if #currentGearStock > 0 then
             enviarWebhook(gweb, "⚙️ Gear Shop - Estoque Atualizado", currentGearStock)
         end
@@ -55,5 +56,5 @@ while true do
         end
     end
 
-    task.wait(0.05)
+    task.wait(0.2)
 end
