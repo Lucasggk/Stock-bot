@@ -1,4 +1,4 @@
-print("Versao: 3")
+print("Versao: 4")
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 
