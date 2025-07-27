@@ -1,40 +1,35 @@
-local player = game:GetService("Players").LocalPlayer
+local HttpService = game:GetService("HttpService")
 
 function enviarWebhook(webhook, title, itens)
+    local hora = os.date("%H:%M")
     local data = {
         content = "",
         embeds = {{
-            title = title,
+            title = title .. " - " .. hora,
             color = 65280,
-            fields = {},
-            footer = {
-                text = "Player: " .. player.Name .. " | " .. os.date("%d/%m/%Y %H:%M:%S")
-            }
+            fields = {}
         }}
     }
 
     for _, texto in ipairs(itens) do
         table.insert(data.embeds[1].fields, {
-            name = "Item",
-            value = texto,
+            name = texto,
+            value = "",
             inline = false
         })
     end
 
-    local jsonData = game:GetService("HttpService"):JSONEncode(data)
+    local jsonData = HttpService:JSONEncode(data)
 
-    local requestFunction = syn and syn.request or http and http.request or request or nil
-    if not requestFunction then
-        warn("Nenhuma função HTTP disponível. Use Synapse ou outro executor com suporte HTTP.")
-        return
+    local req = syn and syn.request or http and http.request or request or nil
+    if req then
+        req({
+            Url = webhook,
+            Method = "POST",
+            Headers = {["Content-Type"] = "application/json"},
+            Body = jsonData
+        })
+    else
+        warn("Executor não suporta requisições HTTP.")
     end
-
-    requestFunction({
-        Url = webhook,
-        Method = "POST",
-        Headers = {
-            ["Content-Type"] = "application/json"
-        },
-        Body = jsonData
-    })
 end
