@@ -35,12 +35,11 @@ while true do
 
     if agora.min % 5 == 0 and segundos <= 1.5 and agora.min ~= ultimoSeedGearMinuto then
         ultimoSeedGearMinuto = agora.min
-
+        task.wait(1)
         local currentSeedStock = coletarEstoque(seedShop)
         if #currentSeedStock > 0 then
             enviarWebhook(sweb, "🌱 Seed Shop - Estoque Atualizado", currentSeedStock)
         end
-        task.wait(0.2)
 
         local currentGearStock = coletarEstoque(gearShop)
         if #currentGearStock > 0 then
@@ -50,7 +49,7 @@ while true do
 
     if agora.min % 30 == 0 and segundos <= 1.5 and agora.min ~= ultimoEggMinuto then
         ultimoEggMinuto = agora.min
-
+        task.wait(1)
         local currentEggStock = coletarEstoque(eggShop)
         if #currentEggStock > 0 then
             enviarWebhook(eweb, "🥚 Egg Shop - Estoque Atualizado", currentEggStock)
