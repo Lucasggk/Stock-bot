@@ -29,7 +29,7 @@ while true do
     local agora = os.date("*t")
     local segundos = agora.sec + (os.clock() % 1)
 
-    if agora.min % 5 == 0 and segundos <= 1 then
+    if agora.min % 5 == 0 and segundos <= 1.5 then
         local currentSeedStock = coletarEstoque(seedShop)
         local currentGearStock = coletarEstoque(gearShop)
 
@@ -41,7 +41,7 @@ while true do
         end
     end
 
-    if (agora.min % 30 == 0) and segundos <= 1 then
+    if (agora.min % 30 == 0) and segundos <= 1.5 then
         local currentEggStock = coletarEstoque(eggShop)
         if #currentEggStock > 0 then
             enviarWebhook(eweb, "🥚 Egg Shop - Estoque Atualizado", currentEggStock)
