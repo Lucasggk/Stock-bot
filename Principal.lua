@@ -5,6 +5,7 @@ local player = Players.LocalPlayer
 local sweb = _G.Seed
 local gweb = _G.Gear
 local eweb = _G.Egg
+local wweb = _G.Event
 
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Lucasggk/Stock-bot/main/Sendwebhook.lua"))()
 
@@ -29,6 +30,7 @@ end
 local ultimoSeedGearMinuto = -1
 local ultimoEggMinuto = -1
 
+task.spawn(function()
 while true do
     local agora = os.date("*t")
     local segundos = agora.sec + (os.clock() % 1)
@@ -58,3 +60,15 @@ while true do
 
     task.wait(0.2)
 end
+end)
+
+game:GetService("ReplicatedStorage").GameEvents:WaitForChild("WeatherEventStarted").OnClientEvent:Connect(function(nomeEvento, duracao)
+	task.spawn(function()
+		local terminaEm = math.round(workspace:GetServerTimeNow()) + duracao
+
+		enviarWebhook(wweb, "🌧️ Weather Event", {
+			"🌦️ Evento: **" .. nomeEvento .. "**",
+			"⏱️ Termina em: <t:" .. terminaEm .. ":R>"
+		})
+	end)
+end)
