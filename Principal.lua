@@ -25,11 +25,16 @@ local function coletarEstoque(scroll)
     return itens
 end
 
+local ultimoSeedGearMinuto = -1
+local ultimoEggMinuto = -1
+
 while true do
     local agora = os.date("*t")
     local segundos = agora.sec + (os.clock() % 1)
 
-    if agora.min % 5 == 0 and segundos <= 1.5 then
+    if agora.min % 5 == 0 and segundos <= 1.5 and agora.min ~= ultimoSeedGearMinuto then
+        ultimoSeedGearMinuto = agora.min
+
         local currentSeedStock = coletarEstoque(seedShop)
         local currentGearStock = coletarEstoque(gearShop)
 
@@ -41,7 +46,9 @@ while true do
         end
     end
 
-    if (agora.min % 30 == 0) and segundos <= 1.5 then
+    if agora.min % 30 == 0 and segundos <= 1.5 and agora.min ~= ultimoEggMinuto then
+        ultimoEggMinuto = agora.min
+
         local currentEggStock = coletarEstoque(eggShop)
         if #currentEggStock > 0 then
             enviarWebhook(eweb, "🥚 Egg Shop - Estoque Atualizado", currentEggStock)
