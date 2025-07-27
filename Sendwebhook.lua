@@ -11,7 +11,10 @@ function enviarWebhook(webhook, title, itens)
         embeds = {{
             title = title .. " - " .. timestampDiscord,
             color = 65280,
-            description = mensagem
+            description = mensagem,
+            footer = {
+                text = "made by Lucas"
+            }
         }}
     }
 
