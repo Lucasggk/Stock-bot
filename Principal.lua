@@ -37,25 +37,32 @@ local function tabelaIgual(t1, t2)
     return true
 end
 
+local function podeEnviar()
+    local agora = os.date("*t")
+    return agora.min % 5 == 0 and agora.sec <= 0.5
+end
+
 while true do
     local currentSeedStock = coletarEstoque(seedShop)
     local currentGearStock = coletarEstoque(gearShop)
     local currentEggStock = coletarEstoque(eggShop)
 
-    if not tabelaIgual(currentSeedStock, lastSeedStock) and #currentSeedStock > 0 then
-        enviarWebhook(sweb, "🌱 Seed Shop - Estoque Atualizado", currentSeedStock)
-        lastSeedStock = currentSeedStock
+    if podeEnviar() then
+        if not tabelaIgual(currentSeedStock, lastSeedStock) and #currentSeedStock > 0 then
+            enviarWebhook(sweb, "🌱 Seed Shop - Estoque Atualizado", currentSeedStock)
+            lastSeedStock = currentSeedStock
+        end
+
+        if not tabelaIgual(currentGearStock, lastGearStock) and #currentGearStock > 0 then
+            enviarWebhook(gweb, "⚙️ Gear Shop - Estoque Atualizado", currentGearStock)
+            lastGearStock = currentGearStock
+        end
+
+        if not tabelaIgual(currentEggStock, lastEggStock) and #currentEggStock > 0 then
+            enviarWebhook(eweb, "🥚 Egg Shop - Estoque Atualizado", currentEggStock)
+            lastEggStock = currentEggStock
+        end
     end
 
-    if not tabelaIgual(currentGearStock, lastGearStock) and #currentGearStock > 0 then
-        enviarWebhook(gweb, "⚙️ Gear Shop - Estoque Atualizado", currentGearStock)
-        lastGearStock = currentGearStock
-    end
-
-    if not tabelaIgual(currentEggStock, lastEggStock) and #currentEggStock > 0 then
-        enviarWebhook(eweb, "🥚 Egg Shop - Estoque Atualizado", currentEggStock)
-        lastEggStock = currentEggStock
-    end
-
-    task.wait(1)
+    task.wait(0.1)
 end
